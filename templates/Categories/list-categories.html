@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block centre %}  
+        
+<!-- Content body start -->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Toutes les Categories</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashbord</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Categories</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Toutes les Categories</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="card-header">
+            <h4 class="card-title">Liste de toutes les Categories </h4>
+            <a href="{{ url_for('ajoutcategories') }}" class="btn btn-primary">Ajouter</a>
+        </div>
+        <div class="row">
+            {% for categorie in Categories %}
+            <div class="col-xl-3 col-xxl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="card">
+                    <img class="img-fluid" src="{{ url_for('static', filename='images/photos/' + categorie.Images) }}" alt="">	
+                    <div class="card-body">
+                        <h4>{{ categorie.Titre }}</h4>
+                    
+                    </div>
+                    <div class="card-header justify-content-end pb-0">
+                        <div class="dropdown">
+                            <button class="btn btn-link" type="button" data-toggle="dropdown">
+                                <span class="dropdown-dots fs--1"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right border py-0">
+                                <div class="py-2">
+                                    <!-- Affichage des liens pour modifier chaque catégorie -->
+                                    <a href="{{ url_for('modifiecategories', IdCategories=categorie.IdCategories) }}" class="dropdown-item">Modifier</a>
+                                    <a href="/supprimecategories/{{categorie.IdCategories}}" class="dropdown-item text-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer la catégorie suivante ?\n\nTitre de la catégorie : {{ categorie.Titre }}\n\nCette action est irréversible.')">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Content body end -->
+{% endblock %}

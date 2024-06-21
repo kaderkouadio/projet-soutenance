@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Résultat de l'analyse</h4>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Choisir un programme :</h2>
+                        <select id="selectProgramme" class="form-control">
+                            {% for programme in programmes %}
+                                <option value="{{ Programmes.IdProgrammes }}">{{ Programmes.Titre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3" id="resultats">
+            <!-- Les résultats seront affichés ici -->
+        </div>
+        
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectProgramme = document.getElementById('selectProgramme');
+
+    selectProgramme.addEventListener('change', function() {
+        const selectedProgrammeId = this.value;
+        fetch(`/get_stats/${selectedProgrammeId}`)
+        .then(response => response.json())
+        .then(data => {
+            const resultatsDiv = document.getElementById('resultats');
+            resultatsDiv.innerHTML = `
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2>Statistiques sur le programme :</h2>
+                            <p>Nombre d'apprenants ayant donné leur avis : ${data.nombre_apprenants}</p>
+                            <p>Nombre d'avis positifs : ${data.nombre_avis_positifs}</p>
+                            <p>Nombre d'avis négatifs : ${data.nombre_avis_negatifs}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2>Statistiques sur le formateur :</h2>
+                            <p>Nombre d'apprenants ayant donné leur avis : ${data.nombre_apprenants_formateur}</p>
+                            <p>Nombre d'avis positifs : ${data.nombre_avis_positifs_formateur}</p>
+                            <p>Nombre d'avis négatifs : ${data.nombre_avis_negatifs_formateur}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    });
+});
+</script>
+
+{% endblock %}

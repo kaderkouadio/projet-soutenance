@@ -1,0 +1,313 @@
+<!--**********************************
+            Sidebar start
+        ***********************************-->
+
+
+        <!--********************** Dashboards Personnels  ******************************* -->
+
+
+    {% if Utilisateurs[8] == 'Personnels'%}
+
+        <div class="dlabnav">
+            <div class="dlabnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Main Menu</li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-home"></i>
+							<span class="nav-text">Dashboard</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('dashbord') }}">Dashboard </a></li>
+                            <li><a href="{{ url_for('Classification') }}">Classification </a></li>
+                            <li><a href="{{ url_for('index') }}">Résultat de l'analyse</a></li>
+                        </ul>
+                    </li>
+					<li><a class="ai-icon" href="{{ url_for('Agenda') }}" aria-expanded="false">
+							<i class="la la-calendar"></i>
+							<span class="nav-text">Gestion des Taches</span>
+						</a>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-user"></i>
+                           <span class="nav-text">Utilisateurs</span>
+                        </a>
+                      
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-user"></i>
+							<span class="nav-text">Formateurs</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listformateurs') }}">list formateurs</a></li>
+                        </ul>
+                    </li>
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-users"></i>
+							<span class="nav-text">Apprenants</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listapprenants') }}">list Apprenants</a></li>
+                            <li><a href="{{ url_for('monespace') }}">Mon espace</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Categories</span>
+                        </a>
+                    <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listcategories') }}">list Categories</a></li>
+                        </ul>
+                    </li>
+
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-graduation-cap"></i>
+							<span class="nav-text">Cours</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listCours')}}">list Cours</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-graduation-cap"></i>
+                           <span class="nav-text">Programmes</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listprogrammes') }}">list programmes</a></li>
+                            <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li>
+                        </ul>
+                    </li>                   
+					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+							<i class="la la-users"></i>
+							<span class="nav-text">Personnels</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listpersonnels')}}">list personnels</a></li>
+                            <li><a href="{{ url_for('profile')}}">Profile du personnel </a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Bailleurs</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listbailleurs')}}">list bailleurs</a></li>
+                            <li><a href="{{ url_for('profile')}}">Profile du bailleurs </a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Communications</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('emailing')}}"> envoi d'email</a></li>
+                            <li><a href="{{ url_for('sentiment')}}">analyse des commentaires</a></li>
+                            <li><a href="{{ url_for('envoyersms')}}">envoi des sms </a></li>
+                        </ul>
+                    </li>
+				</ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+
+
+
+        <!--********************** Dashboards Formateurs  ******************************* -->
+
+        {% elif Utilisateurs[8] == 'Formateurs'%}
+
+        <div class="dlabnav">
+            <div class="dlabnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Main Menu</li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-home"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('dashbord') }}">Dashboard </a></li>
+                            <li><a href="{{ url_for('Classification') }}">Classification </a></li>
+                            <li><a href="{{ url_for('index') }}">Résultat de l'analyse</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="ai-icon" href="{{ url_for('Agenda') }}" aria-expanded="false">
+                            <i class="la la-calendar"></i>
+                            <span class="nav-text">Gestion des Taches</span>
+                        </a>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-user"></i>
+                           <span class="nav-text">Utilisateurs</span>
+                        </a>
+                      
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-user"></i>
+                            <span class="nav-text">Formateurs</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listformateurs') }}">list formateurs</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Categories</span>
+                        </a>
+                    <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listcategories') }}">list Categories</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Cours</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listCours')}}">list Cours</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-graduation-cap"></i>
+                           <span class="nav-text">Programmes</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listprogrammes') }}">list programmes</a></li>
+                            <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Communications</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('emailing')}}"> envoi d'email</a></li>
+                            <li><a href="{{ url_for('sentiment')}}">analyse des commentaires</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+                
+        <!--**********************************
+                    Sidebar end
+        ***********************************-->
+                
+    
+
+         <!--********************** Dashboards Apprenants  ******************************* -->
+
+        {% elif Utilisateurs[8] == 'Apprenants'%}
+
+        <div class="dlabnav">
+            <div class="dlabnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Main Menu</li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-home"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('dashbord') }}">Dashboard </a></li>
+                            <li><a href="{{ url_for('Classification') }}">Classification </a></li>
+                            <li><a href="{{ url_for('index') }}">Résultat de l'analyse</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="ai-icon" href="{{ url_for('Agenda') }}" aria-expanded="false">
+                            <i class="la la-calendar"></i>
+                            <span class="nav-text">Gestion des Taches</span>
+                        </a>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-user"></i>
+                           <span class="nav-text">Utilisateurs</span>
+                        </a>
+                      
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Apprenants</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listapprenants') }}">list Apprenants</a></li>
+                            <li><a href="{{ url_for('monespace') }}">Mon espace</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Categories</span>
+                        </a>
+                    <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listcategories') }}">list Categories</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Cours</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listCours')}}">list Cours</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-graduation-cap"></i>
+                           <span class="nav-text">Programmes</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listprogrammes') }}">list programmes</a></li>
+                            <li><a href="{{ url_for('ajoutprogrammes') }}">Ajout programmes</a></li>
+                            <li><a href="{{ url_for('modifieprogrammes') }}">Modifie programmes</a></li>
+                            <li><a href="{{ url_for('suprimeprogrammes') }}">Suprime programmes</a></li>
+                            <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Personnels</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listpersonnels')}}">list personnels</a></li>
+                            <li><a href="{{ url_for('ajoutpersonnels')}}">Ajout personnels</a></li>
+                            <li><a href="{{ url_for('modifiepersonnels')}}">modifie personnels</a></li>
+                            <li><a href="{{ url_for('suprimepersonnels')}}">suprime personnels</a></li>
+                            <li><a href="{{ url_for('profile')}}">Profile du personnel </a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Bailleurs</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listbailleurs')}}">list bailleurs</a></li>
+                            <li><a href="{{ url_for('ajoutbailleurs')}}">Ajout bailleurs</a></li>
+                            <li><a href="{{ url_for('modifiebailleurs')}}">Modifie bailleurs</a></li>
+                            <li><a href="{{ url_for('suprimebailleurs')}}">suprime bailleurs</a></li>
+                            <li><a href="{{ url_for('profile')}}">Profile du bailleurs </a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Communications</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('emailing')}}"> envoi d'email</a></li>
+                            <li><a href="{{ url_for('sentiment')}}">analyse des commentaires</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+            
+        {% endif%}
+    
+        <!--**********************************
+                Sidebar end
+        ***********************************-->
+
+

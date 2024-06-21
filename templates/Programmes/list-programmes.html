@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Tous nos programmes</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Programmes</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Liste des programmes</a></li>
+                </ol>
+            </div>
+        </div>
+		<div class="card-header">
+            <h4 class="card-title">Liste de tous les programmes </h4>
+            <a href="{{ url_for('ajoutprogrammes') }}" class="btn btn-primary">Ajouter</a>
+        </div>
+        <div class="row">
+            {% for programme in programmes %}
+            <div class="col-xl-3 col-xxl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="card">
+                    <img class="img-fluid" src="{{ url_for('static', filename='images/photos/' + programme.Images) }}" style="width: 550px; height: 250px; object-fit: cover;" alt="">
+                    <div class="card-body">
+                        <h4>{{ programme.Titre }}</h4>
+                        <ul class="list-group mb-3 list-group-flush">
+                            <li class="list-group-item px-0 border-top-0 d-flex justify-content-between">
+                                <span class="mb-0">Date de début :</span><strong>{{ programme.Date_debut }}</strong>
+                            </li>
+                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                <span class="mb-0">Durée du programme :</span><strong>{{ programme.Duree_programmes }}</strong>
+                            </li>
+                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                <span><i class="fa fa-graduation-cap text-primary mr-2"></i>Nombre d'apprenants :</span><strong>{{ programme.Nombre_apprenants }}</strong>
+                            </li>
+                        </ul>
+                        <a href="{{ url_for('infosprogrammes', IdProgrammes=programme.IdProgrammes) }}" class="btn btn-primary">VOIR PLUS</a>
+                    </div>
+                    <div class="card-header justify-content-end pb-0">
+                        <div class="dropdown">
+                            <button class="btn btn-link" type="button" data-toggle="dropdown">
+                                <span class="dropdown-dots fs--1"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right border py-0">
+                                <div class="py-2">
+                                    <a class="dropdown-item" href="{{ url_for('modifieprogrammes', IdProgrammes=programme.IdProgrammes) }}">Modifier</a>
+                                    <a class="dropdown-item text-danger" href="/supprimeprogrammes/{{programme.IdProgrammes}}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer le programme suivant ?\n\nTitre du programme : {{ programme.Titre }}\n\nCette action est irréversible.')">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!--**********************************
+    Content body end
+***********************************-->
+{% endblock %}

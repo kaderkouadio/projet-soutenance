@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<!--**********************************
+            Sidebar start
+        ***********************************-->
+
+
+        <!--********************** Dashboards Personnels  ******************************* -->
+
+
+        {% if Utilisateurs[8] == 'Personnels'%}
+
+
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+
+
+
+        <!--********************** Dashboards Formateurs  ******************************* -->
+
+        {% elif Utilisateurs[8] == 'Formateurs'%}
+
+        <div class="dlabnav">
+            <div class="dlabnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Main Menu</li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-user"></i>
+                            <span class="nav-text">Formateurs</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listformateurs') }}">list formateurs</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Categories</span>
+                        </a>
+                    <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listcategories') }}">list Categories</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-graduation-cap"></i>
+                            <span class="nav-text">Cours</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listCours')}}">list Cours</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                           <i class="la la-graduation-cap"></i>
+                           <span class="nav-text">Programmes</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('listprogrammes') }}">list programmes</a></li>
+                            <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="la la-users"></i>
+                            <span class="nav-text">Communications</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ url_for('emailing')}}"> envoi d'email</a></li>
+                            <li><a href="{{ url_for('sentiment')}}">analyse des commentaires</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+                
+        <!--**********************************
+                    Sidebar end
+        ***********************************-->
+                
+    
+
+         <!--********************** Dashboards Apprenants  ******************************* -->
+
+        {% elif Utilisateurs[8] == 'Apprenants'%}
+
+
+
+            
+        {% endif%}
+    
+        <!--**********************************
+                Sidebar end
+        ***********************************-->
+
+
+{%endblock%}

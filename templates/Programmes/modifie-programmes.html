@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block centre %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Modifier programme</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Programmes</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Modifier programme</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Modification du programme</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('modifieprogrammes', IdProgrammes=programme.IdProgrammes) }}" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Titre du programme</label>
+                                        <input type="text" class="form-control" name="Titre" value="{{ programme.Titre }}" placeholder="Titre" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Détails du programme</label>
+                                        <textarea class="form-control" rows="5" placeholder="Détails du programme" name="DetailsProgrammes" required>{{ programme.DetailsProgrammes }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Durée du programme</label>
+                                        <input type="text" class="form-control" name="Duree_programmes" value="{{ programme.Duree_programmes }}" placeholder="Durée du programme" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nombre d'apprenants</label>
+                                        <input type="number" class="form-control" name="Nombre_apprenants" value="{{ programme.Nombre_apprenants }}" placeholder="Nombre d'apprenants" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date de début</label>
+                                        <input type="date" class="form-control" name="Date_debut" value="{{ programme.Date_debut }}" placeholder="Date de début" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date de fin</label>
+                                        <input type="date" class="form-control" name="Date_fin" value="{{ programme.Date_fin }}" placeholder="Date de fin" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="IdCategories">Catégorie</label>
+                                        <select class="form-control" name="IdCategories" id="IdCategories" required>
+                                            <option selected disabled>Choisissez...</option>
+                                            {% for categorie in Categories %}
+                                                <option value="{{ categorie.IdCategories }}" {% if categorie.IdCategories == programme.IdCategories %} selected {% endif %}>{{ categorie.Titre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group fallback w-100">
+                                        <label class="form-label d-block">Photo du programme</label>
+                                        <input type="file" name="Images" class="dropify" data-default-file="{{ url_for('static', filename='images/photos/' + programme.Images) }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-light">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

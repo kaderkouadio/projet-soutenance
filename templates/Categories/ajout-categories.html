@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block centre %} 
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+				    
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Nouvelles Categories</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashbord</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0);">Categories</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ url_for('listcategories') }}">Ajout Categories</a></li>
+                        </ol>
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Ajout Categories </h4>
+							</div>
+							<div class="card-body">
+								<form action="{{ url_for('ajoutcategories') }}"  method="POST" enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label">Titre Categories</label>
+												<input type="text" class="form-control" name="Titre"id="validationCustom01" placeholder="Titre" value="" required>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12">
+											<div class="form-group">
+												<label class="form-label"> DetailsCategories</label>
+												<textarea type="text" class="form-control" name="DetailsCategories"rows="5" placeholder="DetailsCategories" value="" required></textarea>
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="form-group fallback w-100">
+												<label class="form-label d-block">Photo Categories</label>
+												<input type="file" name="Images" class="dropify" data-default-file=""required>
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<button type="submit" class="btn btn-primary">envoyer</button>
+											<button type="submit" class="btn btn-light">Cencel</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+{% endblock %}

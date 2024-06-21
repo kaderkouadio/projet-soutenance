@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>FORMATEURS</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashbord</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Formateurs</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">list formateurs</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills mb-3">
+                    <li class="nav-item"><a href="#list-view" data-toggle="tab" class="nav-link btn-primary mr-1 show active">Option d'affichage 1</a></li>
+                    <li class="nav-item"><a href="#grid-view" data-toggle="tab" class="nav-link btn-primary">Option d'affichage 2</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-12">
+                <div class="row tab-content">
+                    <div id="list-view" class="tab-pane fade active show col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste de tous les formateurs </h4>
+                                <a href="{{ url_for('ajoutformateurs') }}" class="btn btn-primary">Ajouter</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example3" class="display" style="min-width: 845px">
+                                        <thead>
+                                            <tr>
+                                                <th>Images</th>
+                                                <th>Nom</th>
+                                                <th>Prenoms</th>
+                                                <th>Programmes</th>
+                                                <th>Genre</th>
+                                                <th>Adresse</th>
+                                                <th>Telephone</th>
+                                                <th>Email</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if formateurs %}
+                                                {% for formateur in formateurs %}
+                                                <tr>
+                                                    <td><img class="rounded-circle" width="35" src="{{ url_for('static', filename='images/photos/' + formateur.Image_Url) }}" alt=""></td>
+                                                    <td>{{ formateur.Nom }}</td>
+                                                    <td>{{ formateur.Prenoms }}</td>
+                                                    <td>{{ formateur.Titre }}</td>
+                                                    <td>{{ formateur.Genre }}</td>
+                                                    <td>{{ formateur.Adresse }}</td>
+                                                    <td><a href="tel:{{ formateur.Telephone }}"><strong>{{ formateur.Telephone }}</strong></a></td>
+                                                    <td><a href="mailto:{{ formateur.Email }}"><strong>{{ formateur.Email }}</strong></a></td>
+                                                    <td>
+                                                        <a href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdUtilisateurs) }}" class="btn btn-sm btn-primary"><i class="la la-pencil"></i></a>
+                                                        <a href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdUtilisateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"><i class="la la-trash-o"></i></a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="9" class="text-center">Aucun formateur trouvé.</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="grid-view" class="tab-pane fade col-lg-12">
+                        <div class="row">
+                            {% if formateurs %}
+                                {% for formateur in formateurs %}
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                                    <div class="card card-profile">
+                                        <div class="card-header justify-content-end pb-0">
+                                            <div class="dropdown">
+                                                <button class="btn btn-link" type="button" data-toggle="dropdown">
+                                                    <span class="dropdown-dots fs--1"></span>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right border py-0">
+                                                    <div class="py-2">
+                                                        <a class="dropdown-item" href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdUtilisateurs) }}">Modifier</a>
+                                                        <a class="dropdown-item text-danger" href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdUtilisateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"> Supprimer</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body pt-2">
+                                            <div class="text-center">
+                                                <div class="profile-photo">
+                                                    <img src="{{ url_for('static', filename='images/photos/' + formateur.Image_Url) }}" width="100" class="img-fluid rounded-circle" alt="">
+                                                </div>
+                                                <h3 class="mt-4 mb-1">{{ formateur.Nom }} {{ formateur.Prenoms }}</h3>
+                                                <p class="text-muted">{{ formateur.Diplomes }}</p>
+                                                <ul class="list-group mb-3 list-group-flush">
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span class="mb-0">Genre :</span><strong>{{ formateur.Genre }}</strong>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span class="mb-0">Telephone :</span><strong>{{ formateur.Telephone }}</strong>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span class="mb-0">Email :</span><strong>{{ formateur.Email }}</strong>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span class="mb-0">Programmes :</span><strong>{{ formateur.Titre }}</strong>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span class="mb-0">Adresse :</span><strong>{{ formateur.Adresse }}</strong>
+                                                    </li>
+                                                </ul>
+                                                <a class="btn btn-outline-primary btn-rounded mt-3 px-4" href="professor-profile.html">VOIR PLUS</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-lg-12 text-center">Aucun formateur trouvé.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--**********************************
+    Content body end
+***********************************-->
+
+{% endblock %}

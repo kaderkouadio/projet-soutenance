@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block centre %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Nouvel Email</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashbord') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Email</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Nouveau Email</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Détails de l'Email</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="title">Espace d'envoi d'e-mails personnalisé</div>
+                        <p>Business Intelligence</p><br>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="flash {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                        
+                        <form action="{{ url_for('emailing') }}" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="IdProgrammes">Programmes</label>
+                                <select class="form-control" name="IdProgrammes" id="IdProgrammes" required>
+                                    <option selected disabled>Choisissez...</option>
+                                    {% for programme in Programmes %}
+                                        <option value="{{ programme.IdProgrammes }}">{{ programme.Titre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- Section pour envoyer des emails au formateur -->
+                                    <div class="form-group">
+                                        <h5>Envoyer Email au Formateur</h5>
+                                        <label class="form-label">Titre de l'Email</label>
+                                        <input type="text" class="form-control" name="subject_formateur" required>
+                                        <label class="form-label">Contenu de l'Email</label>
+                                        <textarea class="form-control" name="message_formateur" rows="5" required></textarea>
+                                        <label class="form-label">Pièces Jointes</label>
+                                        <input type="file" class="form-control" name="attachments_formateur" multiple>
+                                        <label class="form-label">Envoyer à</label>
+                                        <select class="form-control" name="send_time_formateur" required>
+                                            <option value="now">Maintenant</option>
+                                            <option value="schedule">Planifier</option>
+                                        </select>
+                                        <div id="schedule-time-formateur" style="display:none;">
+                                            <label class="form-label">Date et Heure</label>
+                                            <input type="datetime-local" class="form-control" name="scheduled_time_formateur">
+                                        </div>
+                                        <button type="submit" name="send_to" value="formateur" class="btn btn-primary mt-3">Envoyer au Formateur</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <!-- Section pour envoyer des emails aux apprenants -->
+                                    <div class="form-group">
+                                        <h5>Envoyer Email aux Apprenants</h5>
+                                        <label class="form-label">Titre de l'Email</label>
+                                        <input type="text" class="form-control" name="subject_apprenants" required>
+                                        <label class="form-label">Contenu de l'Email</label>
+                                        <textarea class="form-control" name="message_apprenants" rows="5" required></textarea>
+                                        <label class="form-label">Pièces Jointes</label>
+                                        <input type="file" class="form-control" name="attachments_apprenants" multiple>
+                                        <label class="form-label">Envoyer à</label>
+                                        <select class="form-control" name="send_time_apprenants" required>
+                                            <option value="now">Maintenant</option>
+                                            <option value="schedule">Planifier</option>
+                                        </select>
+                                        <div id="schedule-time-apprenants" style="display:none;">
+                                            <label class="form-label">Date et Heure</label>
+                                            <input type="datetime-local" class="form-control" name="scheduled_time_apprenants">
+                                        </div>
+                                        <button type="submit" name="send_to" value="apprenants" class="btn btn-primary mt-3">Envoyer aux Apprenants</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+    
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sendTimeSelectFormateur = document.querySelector('select[name="send_time_formateur"]');
+    const scheduleTimeDivFormateur = document.getElementById('schedule-time-formateur');
+    
+    sendTimeSelectFormateur.addEventListener('change', function() {
+        if (this.value === 'schedule') {
+            scheduleTimeDivFormateur.style.display = 'block';
+        } else {
+            scheduleTimeDivFormateur.style.display = 'none';
+        }
+    });
+
+    const sendTimeSelectApprenants = document.querySelector('select[name="send_time_apprenants"]');
+    const scheduleTimeDivApprenants = document.getElementById('schedule-time-apprenants');
+    
+    sendTimeSelectApprenants.addEventListener('change', function() {
+        if (this.value === 'schedule') {
+            scheduleTimeDivApprenants.style.display = 'block';
+        } else {
+            scheduleTimeDivApprenants.style.display = 'none';
+        }
+    });
+});
+</script>
+
+{% endblock %}

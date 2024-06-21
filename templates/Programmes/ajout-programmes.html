@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block centre %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Nouveaux programmes</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashbord</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">programmes</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Ajout programmes</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Details du programme</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('ajoutprogrammes') }}" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Titre du programme</label>
+                                        <input type="text" class="form-control" name="Titre" placeholder="Titre" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Details Programmes</label>
+                                        <textarea class="form-control" name="DetailsProgrammes" rows="5" placeholder="DetailsProgrammes" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Duree programmes</label>
+                                        <input type="text" class="form-control" name="Duree_programmes" placeholder="Duree_programmes" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nombre d'Apprenants</label>
+                                        <input type="number" class="form-control" name="Nombre_apprenants" placeholder="Nombre_Apprenants" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date debut</label>
+                                        <input type="date" class="form-control" name="Date_debut" placeholder="Date_debut" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date fin</label>
+                                        <input type="date" class="form-control" name="Date_fin" placeholder="Date_fin" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="IdCategories">Categories</label>
+                                        <select class="form-control" name="IdCategories" id="IdCategories" required>
+                                            <option selected disabled>Choisissez...</option>
+                                            {% for categorie in Categories %}
+                                                <option value="{{ categorie.IdCategories }}">{{ categorie.Titre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group fallback w-100">
+                                        <label class="form-label d-block">Photo du programme</label>
+                                        <input type="file" name="Images" class="dropify" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-light">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

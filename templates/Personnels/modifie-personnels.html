@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block centre %}
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Modifier les Informations du Personnel</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Personnels</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Modifier Personnels</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-12 col-xxl-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Informations Personnelles</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if info %}
+                        <form action="{{ url_for('modifiepersonnels', IdPersonnels=info.IdPersonnels) }}" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom</label>
+                                        <input type="text" class="form-control" name="Nom" id="Nom" value="{{ info.Nom }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Prenoms</label>
+                                        <input type="text" class="form-control" name="Prenoms" id="Prenoms" value="{{ info.Prenoms }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="Email" id="Email" value="{{ info.Email }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Mot de passe</label>
+                                        <input type="password" class="form-control" name="Mot_de_pass" id="Mot_de_pass" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Confirmer Mot de passe</label>
+                                        <input type="password" class="form-control" name="confirmer_Mot_de_pass" id="confirmer_Mot_de_pass" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Roles" class="form-label">Rôles</label>
+                                        <select name="Roles" class="form-control" id="Roles" required>
+                                            <option selected disabled value="">Choisissez...</option>
+                                            <option value="Administrateur" {% if info.Roles == 'Administrateur' %}selected{% endif %}>Administrateur</option>
+                                            <option value="Personnels" {% if info.Roles == 'Personnels' %}selected{% endif %}>Personnels</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Telephone</label>
+                                        <input type="tel" class="form-control" name="Telephone" id="Telephone" value="{{ info.Telephone }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Adresse</label>
+                                        <input type="text" class="form-control" name="Adresse" id="Adresse" value="{{ info.Adresse }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Genre" class="form-label">Genre</label>
+                                        <select name="Genre" class="form-control" id="Genre" required>
+                                            <option selected disabled value="">Choisissez...</option>
+                                            <option value="Homme" {% if info.Genre == 'Homme' %}selected{% endif %}>Homme</option>
+                                            <option value="Femme" {% if info.Genre == 'Femme' %}selected{% endif %}>Femme</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date de création</label>
+                                        <input type="datetime" name="Date_Creation" class="datepicker-default form-control" id="Date_Creation" value="{{ info.Date_Creation }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date d'embauche</label>
+                                        <input type="date" name="Date_embauche" class="datepicker-default form-control" id="Date_embauche" value="{{ info.Date_embauche }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group fallback w-100">
+                                        <input type="file" class="dropify" name="file" data-default-file="{{ info.Image_Url }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-light">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
+                        <p>Personnel non trouvé.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--**********************************
+    Content body end
+***********************************-->
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Mon espace</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashbord') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Programme</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Mon Programme</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for programme in programmes %}
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Détails du Programme</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ programme.Titre }}</h5>
+                        <p>{{ programme.DetailsProgrammes }}</p>
+                        <p>Durée du Programme: {{ programme.Duree_programme }}</p>
+                        <p>Date de début: {{ programme.Date_debut }}</p>
+                        <p>Date de fin: {{ programme.Date_fin }}</p>
+                        <hr>
+                        {% for formateur in formateurs %}
+                        {% if formateur.IdProgrammes == programme.IdProgrammes %}
+                        <h6>Formateur: {{ formateur.Nom }} {{ formateur.Prenoms }}</h6>
+                        <p>Contact: {{ formateur.Email }}, {{ formateur.Telephone }}</p>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Avis sur le Programme</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="programme-feedback-form">
+                            <div class="form-group">
+                                <label class="form-label">Votre avis</label>
+                                <textarea class="form-control" name="avis_programme" rows="5" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Envoyer à</label>
+                                <select class="form-control" name="send_time" required>
+                                    <option value="now">Maintenant</option>
+                                    <option value="schedule">Planifier</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="schedule-time-programme" style="display:none;">
+                                <label class="form-label">Date et Heure</label>
+                                <input type="datetime-local" class="form-control" name="scheduled_time_programme">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                                <button type="reset" class="btn btn-light">Annuler</button>
+                            </div>
+                        </form>
+                        <div id="programme-feedback-result"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Avis sur le Formateur</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="formateur-feedback-form">
+                            <div class="form-group">
+                                <label class="form-label">Votre avis</label>
+                                <textarea class="form-control" name="avis_formateur" rows="5" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Envoyer à</label>
+                                <select class="form-control" name="send_time" required>
+                                    <option value="now">Maintenant</option>
+                                    <option value="schedule">Planifier</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="schedule-time-formateur" style="display:none;">
+                                <label class="form-label">Date et Heure</label>
+                                <input type="datetime-local" class="form-control" name="scheduled_time_formateur">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                                <button type="reset" class="btn btn-light">Annuler</button>
+                            </div>
+                        </form>
+                        <div id="formateur-feedback-result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const programmeForm = document.getElementById('programme-feedback-form');
+    const formateurForm = document.getElementById('formateur-feedback-form');
+
+    const sendTimeSelectProgramme = programmeForm.querySelector('select[name="send_time"]');
+    const scheduleTimeDivProgramme = document.getElementById('schedule-time-programme');
+    sendTimeSelectProgramme.addEventListener('change', function() {
+        if (this.value === 'schedule') {
+            scheduleTimeDivProgramme.style.display = 'block';
+        } else {
+            scheduleTimeDivProgramme.style.display = 'none';
+        }
+    });
+
+    const sendTimeSelectFormateur = formateurForm.querySelector('select[name="send_time"]');
+    const scheduleTimeDivFormateur = document.getElementById('schedule-time-formateur');
+    sendTimeSelectFormateur.addEventListener('change', function() {
+        if (this.value === 'schedule') {
+            scheduleTimeDivFormateur.style.display = 'block';
+        } else {
+            scheduleTimeDivFormateur.style.display = 'none';
+        }
+    });
+
+    programmeForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const avis = programmeForm.querySelector('textarea[name="avis_programme"]').value;
+        const sendTime = programmeForm.querySelector('select[name="send_time"]').value;
+        const scheduledTime = programmeForm.querySelector('input[name="scheduled_time_programme"]').value;
+        
+        fetch('/analyze_comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ comment: avis, send_time: sendTime, scheduled_time: scheduledTime }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('programme-feedback-result').innerText = 'Sentiment: ' + data.sentiment;
+        });
+    });
+
+    formateurForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const avis = formateurForm.querySelector('textarea[name="avis_formateur"]').value;
+        const sendTime = formateurForm.querySelector('select[name="send_time"]').value;
+        const scheduledTime = formateurForm.querySelector('input[name="scheduled_time_formateur"]').value;
+        
+        fetch('/analyze_comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ comment: avis, send_time: sendTime, scheduled_time: scheduledTime }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('formateur-feedback-result').innerText = 'Sentiment: ' + data.sentiment;
+        });
+    });
+});
+</script>
+
+{% endblock %}

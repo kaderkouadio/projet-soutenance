@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block centre %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Modifier Apprenant</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashbord</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Apprenant</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Modifier Apprenant</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-xxl-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Informations personnelles</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('modifieapprenants', IdApprenants=apprenant.IdApprenants) }}" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom</label>
+                                        <input type="text" class="form-control" name="Nom" value="{{ apprenant.Nom }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Prenoms</label>
+                                        <input type="text" class="form-control" name="Prenoms" value="{{ apprenant.Prenoms }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="Email" value="{{ apprenant.Email }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Roles" class="form-label">Rôles</label>
+                                        <select name="Roles" class="form-control" required>
+                                            <option value="Apprenants" {% if apprenant.Roles == 'Apprenants' %}selected{% endif %}>Apprenants</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Téléphone</label>
+                                        <input type="tel" class="form-control" name="Telephone" value="{{ apprenant.Telephone }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Adresse</label>
+                                        <input type="text" class="form-control" name="Adresse" value="{{ apprenant.Adresse }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Genre" class="form-label">Genre</label>
+                                        <select name="Genre" class="form-control" required>
+                                            <option value="Homme" {% if apprenant.Genre == 'Homme' %}selected{% endif %}>Homme</option>
+                                            <option value="Femme" {% if apprenant.Genre == 'Femme' %}selected{% endif %}>Femme</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Date de création</label>
+                                        <input type="datetime" name="Date_Creation" class="form-control" value="{{ apprenant.Date_Creation }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5 class="card-title">Informations sur l'apprenant</h5>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Niveau d'études</label>
+                                        <input type="text" class="form-control" name="Niveau_Etudes" value="{{ apprenant.Niveau_Etudes }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Âge</label>
+                                        <input type="number" class="form-control" name="Age" value="{{ apprenant.Age }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom complet du parent</label>
+                                        <input type="text" class="form-control" name="Nom_Complet_Parent" value="{{ apprenant.Nom_Complet_Parent }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Téléphone du parent</label>
+                                        <input type="tel" class="form-control" name="Telephone_Parent" value="{{ apprenant.Telephone_Parent }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Adresse du parent</label>
+                                        <input type="text" class="form-control" name="Adresse_Parent" value="{{ apprenant.Adresse_Parent }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="IdProgrammes" class="form-label">Programme</label>
+                                        <select name="IdProgrammes" class="form-control" required>
+                                            {% for programme in Programmes %}
+                                                <option value="{{ programme.IdProgrammes }}" {% if programme.IdProgrammes == apprenant.IdProgrammes %}selected{% endif %}>{{ programme.Titre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Pièce d'identité</label>
+                                        <input type="file" class="form-control" name="Piece_Identite">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Diplômes</label>
+                                        <input type="file" class="form-control" name="Diplomes">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Image</label>
+                                        <input type="file" class="form-control" name="Images">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

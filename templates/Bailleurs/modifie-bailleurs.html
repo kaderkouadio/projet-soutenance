@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block centre %}
+<!--**********************************
+     Content body start
+ ***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Modifier Bailleur</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="">Bailleurs</a></li>
+                    <li class="breadcrumb-item active"><a href="">Modifier Bailleur</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xl-12 col-xxl-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Modifier les informations du bailleur</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('modifiebailleurs', IdBailleurs=bailleur.IdBailleurs) }}" method="POST">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom de l'Entreprise</label>
+                                        <input type="text" class="form-control" name="NomEntreprise" id="NomEntreprise" value="{{ bailleur.NomEntreprise }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Adresse</label>
+                                        <input type="text" class="form-control" name="Adresse" id="Adresse" value="{{ bailleur.Adresse }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="Email" id="Email" value="{{ bailleur.Email }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Téléphone</label>
+                                        <input type="tel" class="form-control" name="Telephone" id="Telephone" value="{{ bailleur.Telephone }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="IdProgrammes">Programmes</label>
+                                        <select class="form-control" name="IdProgrammes" id="IdProgrammes" required>
+                                            {% for programme in Programmes %}
+                                                <option value="{{ programme.IdProgrammes }}" {% if programme.IdProgrammes == bailleur.IdProgrammes %}selected{% endif %}>{{ programme.Titre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="TypeFinancement" class="form-label">Type de Financement</label>
+                                        <select name="TypeFinancement" class="form-control" id="TypeFinancement" required>
+                                            <option value="Subvention" {% if bailleur.TypeFinancement == 'Subvention' %}selected{% endif %}>Subvention</option>
+                                            <option value="Don" {% if bailleur.TypeFinancement == 'Don' %}selected{% endif %}>Don</option>
+                                            <option value="Sponsoring" {% if bailleur.TypeFinancement == 'Sponsoring' %}selected{% endif %}>Sponsoring</option>
+                                            <option value="Prêt" {% if bailleur.TypeFinancement == 'Prêt' %}selected{% endif %}>Prêt</option>
+                                            <option value="Investissement" {% if bailleur.TypeFinancement == 'Investissement' %}selected{% endif %}>Investissement</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Détails du Financement</label>
+                                        <textarea class="form-control" name="DetailsFinancement" rows="5" required>{{ bailleur.DetailsFinancement }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Montant du Financement</label>
+                                        <input type="number" step="0.01" class="form-control" name="MontantFinancement" id="MontantFinancement" value="{{ bailleur.MontantFinancement }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom du Contact</label>
+                                        <input type="text" class="form-control" name="Nom_Contact" id="Nom_Contact" value="{{ bailleur.Nom_Contact }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Genre" class="form-label">Genre</label>
+                                        <select name="Genre" class="form-control" id="Genre" required>
+                                            <option value="Homme" {% if bailleur.Genre == 'Homme' %}selected{% endif %}>Homme</option>
+                                            <option value="Femme" {% if bailleur.Genre == 'Femme' %}selected{% endif %}>Femme</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Poste du Contact</label>
+                                        <input type="text" class="form-control" name="Poste_Contact" id="Poste_Contact" value="{{ bailleur.Poste_Contact }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Téléphone du Contact</label>
+                                        <input type="tel" class="form-control" name="Telephone_Contact" id="Telephone_Contact" value="{{ bailleur.Telephone_Contact }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Email du Contact</label>
+                                        <input type="email" class="form-control" name="Email_Contact" id="Email_Contact" value="{{ bailleur.Email_Contact }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                                    <a href="{{ url_for('listbailleurs') }}" class="btn btn-light">Annuler</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--**********************************
+     Content body end
+ ***********************************-->
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block centre %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Envoyer SMS</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashbord') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">SMS</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Nouveau SMS</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Envoyer SMS</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="title">Espace d'envoi de SMS personnalisé</div>
+                        <p>Business Intelligence</p><br>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="flash {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                        
+                        <form action="{{ url_for('envoyersms') }}" method="POST">
+                            <div class="form-group">
+                                <label for="IdProgrammes">Programmes</label>
+                                <select class="form-control" name="IdProgrammes" id="IdProgrammes" required>
+                                    <option selected disabled>Choisissez...</option>
+                                    {% for programme in Programmes %}
+                                        <option value="{{ programme.IdProgrammes }}">{{ programme.Titre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- Section pour envoyer des SMS au formateur -->
+                                    <div class="form-group">
+                                        <h5>Envoyer SMS au Formateur</h5>
+                                        <label class="form-label">Contenu du SMS</label>
+                                        <textarea class="form-control" name="message_formateur" rows="5" required></textarea>
+                                    </div>
+                                    <button type="submit" name="send_to" value="formateur" class="btn btn-primary">Envoyer au Formateur</button>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <!-- Section pour envoyer des SMS aux apprenants -->
+                                    <div class="form-group">
+                                        <h5>Envoyer SMS aux Apprenants</h5>
+                                        <label class="form-label">Contenu du SMS</label>
+                                        <textarea class="form-control" name="message_apprenants" rows="5" required></textarea>
+                                    </div>
+                                    <button type="submit" name="send_to" value="apprenants" class="btn btn-primary">Envoyer aux Apprenants</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

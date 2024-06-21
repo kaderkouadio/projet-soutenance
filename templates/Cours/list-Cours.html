@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Tous nos Cours</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Cours</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Liste des Cours</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="card-header">
+            <h4 class="card-title">Liste de tous les Cours </h4>
+            <a href="{{ url_for('ajoutCours') }}" class="btn btn-primary">Ajouter</a>
+        </div>
+        <div class="row">
+            {% for Cours in Cours %}
+            <div class="col-xl-3 col-xxl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="card">
+                    <img class="img-fluid" src="{{ url_for('static', filename='images/photos/' + Cours.Images) }}" alt="">
+                    <div class="card-body">
+                        <h4>{{ Cours.Titre }}</h4>
+                        <ul class="list-group mb-3 list-group-flush">
+                            <a href="{{ url_for('infoscours', id=Cours.IdCours) }}" class="btn btn-primary">VOIR PLUS</a>
+                        </ul>
+                    </div>
+                    <div class="card-header justify-content-end pb-0">
+                        <div class="dropdown">
+                            <button class="btn btn-link" type="button" data-toggle="dropdown">
+                                <span class="dropdown-dots fs--1"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right border py-0">
+                                <div class="py-2">
+                                    <a class="dropdown-item" href="{{ url_for('modifiecours', id=Cours.IdCours) }}">Modifier</a>
+                                    <a class="dropdown-item text-danger" href="{{ url_for('supprimeCours', id=Cours.IdCours) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer le cours suivant ?\n\nTitre du cours : {{ Cours.Titre }}\n\nCette action est irréversible.');">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!--**********************************
+    Content body end
+***********************************-->
+{% endblock %}
