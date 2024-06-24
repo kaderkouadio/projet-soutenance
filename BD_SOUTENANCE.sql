@@ -183,9 +183,21 @@ select * from  Apprenants
 select Images,Titre, Nombre_apprenants,Date_debut, Duree_programmes from Programmes;
 
 
+SELECT U.Telephone
+FROM Utilisateurs U
+INNER JOIN Formateurs F ON U.IdUtilisateurs = F.IdUtilisateurs
+WHERE F.IdProgrammes = 1;
 
 
 
+SELECT U.Telephone
+FROM Utilisateurs U
+INNER JOIN Formateurs F ON U.IdUtilisateurs = F.IdUtilisateurs
+WHERE F.IdProgrammes IN (
+    SELECT P.IdProgrammes
+    FROM Programmes P
+    WHERE P.Titre LIKE '%Developpeur Data IA%'
+);
 
 
 DELETE FROM Utilisateurs WHERE IdUtilisateurs = 1;

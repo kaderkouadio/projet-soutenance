@@ -66,8 +66,8 @@
                                                     <td><a href="tel:{{ formateur.Telephone }}"><strong>{{ formateur.Telephone }}</strong></a></td>
                                                     <td><a href="mailto:{{ formateur.Email }}"><strong>{{ formateur.Email }}</strong></a></td>
                                                     <td>
-                                                        <a href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdUtilisateurs) }}" class="btn btn-sm btn-primary"><i class="la la-pencil"></i></a>
-                                                        <a href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdUtilisateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"><i class="la la-trash-o"></i></a>
+                                                        <a href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdFormateurs) }}" class="btn btn-sm btn-primary"><i class="la la-pencil"></i></a>
+                                                        <a href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdFormateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"><i class="la la-trash-o"></i></a>
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
@@ -95,8 +95,8 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right border py-0">
                                                     <div class="py-2">
-                                                        <a class="dropdown-item" href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdUtilisateurs) }}">Modifier</a>
-                                                        <a class="dropdown-item text-danger" href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdUtilisateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"> Supprimer</a>
+                                                        <a class="dropdown-item" href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdFormateurs) }}">Modifier</a>
+                                                        <a class="dropdown-item text-danger" href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdFormateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"> Supprimer</a>
                                                     </div>
                                                 </div>
                                             </div>

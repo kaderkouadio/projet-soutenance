@@ -23,7 +23,12 @@
         </div>
 		<div class="card-header">
             <h4 class="card-title">Liste de tous les programmes </h4>
-            <a href="{{ url_for('ajoutprogrammes') }}" class="btn btn-primary">Ajouter</a>
+            
+                    {% if role == 'Apprenants' or role == 'Formateurs' %}
+                        <!-- Ne rien afficher -->
+                    {% else %}
+                    <a href="{{ url_for('ajoutprogrammes') }}" class="btn btn-primary">Ajouter</a>
+                    {% endif %} 
         </div>
         <div class="row">
             {% for programme in programmes %}

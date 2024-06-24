@@ -24,7 +24,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from emailling  import *
+# from emailling  import *
 from sms import *
 
 # Pour générer des données fictives
@@ -317,8 +317,8 @@ def accueilApprenants():
     
     
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser))
-    Utilisateur = cursor.fetchone()
-    return render_template('accueilApprenants.html',Utilisateurs=Utilisateur)
+    Utilisateurs = cursor.fetchone()
+    return render_template('accueilApprenants/dashbord_apprenant.html',Utilisateurs=Utilisateurs)
 
 
 
@@ -753,8 +753,18 @@ def listformateurs():
     Utilisateurs = cursor.fetchone()
     
     # Sélectionner les formateurs et les informations associées
+    # cursor.execute("""
+    #     SELECT U.Nom, U.Prenoms, U.Genre, U.Telephone, U.Email, U.Adresse, I.Image_Url, P.Titre, U.IdUtilisateurs, IdFormateurs
+    #     FROM Utilisateurs U
+    #     JOIN Formateurs F ON U.IdUtilisateurs = F.IdUtilisateurs
+    #     JOIN Images I ON U.IdUtilisateurs = I.IdUtilisateurs
+    #     JOIN Programmes P ON F.IdProgrammes = P.IdProgrammes
+    # """)
+    # formateurs = cursor.fetchall()
+    
+    
     cursor.execute("""
-        SELECT U.Nom, U.Prenoms, U.Genre, U.Telephone, U.Email, U.Adresse, I.Image_Url, P.Titre, U.IdUtilisateurs
+        SELECT U.Nom, U.Prenoms, U.Genre, U.Telephone, U.Email, U.Adresse, I.Image_Url, P.Titre, U.IdUtilisateurs, F.IdFormateurs
         FROM Utilisateurs U
         JOIN Formateurs F ON U.IdUtilisateurs = F.IdUtilisateurs
         JOIN Images I ON U.IdUtilisateurs = I.IdUtilisateurs
@@ -887,10 +897,12 @@ def ajoutformateurs():
 
 @app.route("/modifie-formateurs/<int:IdFormateurs>", methods=['GET', 'POST'])
 def modifieformateurs(IdFormateurs):
+    print(f"IdFormateurs: {IdFormateurs}")
     # Vérifier si l'utilisateur est connecté
     if 'IdUtilisateurs' not in session:
         return redirect(url_for('login'))
     IdUser = session.get('IdUtilisateurs')
+    print(IdUser)
     
     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
     cursor = connection.cursor()
@@ -920,7 +932,7 @@ def modifieformateurs(IdFormateurs):
         return redirect(url_for('listformateurs'))
 
     # Récupérer les informations de l'utilisateur associé
-    cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (formateurs.IdUtilisateurs,))
+    cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdFormateurs,))
     Utilisateurs = cursor.fetchone()
 
     if request.method == 'POST':
@@ -967,8 +979,10 @@ def modifieformateurs(IdFormateurs):
             cursor.execute("""
                 UPDATE Utilisateurs SET Nom = ?, Prenoms = ?, Genre = ?, Telephone = ?, Adresse = ?, Email = ?, Mot_de_pass = ?, Roles = ?, Date_Creation = ?,
                 WHERE IdUtilisateurs = ?
-            """, (Nom, Prenoms, Genre, Telephone, Adresse, Email, hashed_password, Roles, Date_Creation,  Utilisateurs.IdUtilisateurs))
+            """, (Nom, Prenoms, Genre, Telephone, Adresse, Email, hashed_password, Roles, Date_Creation,  IdFormateurs))
             connection.commit()
+            
+            print(f"Prenoms: {Prenoms}")
 
             # Mettre à jour la table Formateurs
             cursor.execute("""
@@ -976,13 +990,15 @@ def modifieformateurs(IdFormateurs):
                 WHERE IdFormateurs = ?
             """, (diplome_filename, Annees_Experiences, IdProgrammes, IdFormateurs))
             connection.commit()
+            
+            print(f"Annees_Experiences: {Annees_Experiences}")
 
             # Mettre à jour la table Images si une nouvelle image est téléchargée
             if image_filename:
                 cursor.execute("""
                     UPDATE Images SET Image_Url = ?
                     WHERE IdUtilisateurs = ?
-                """, (image_filename, Utilisateurs.IdUtilisateurs))
+                """, (image_filename, IdFormateurs))
                 connection.commit()
             
             flash('Formateur modifié avec succès', 'success')
@@ -1465,11 +1481,11 @@ def monespace():
     
     # Récupérer les informations de l'utilisateur connecté
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", IdUser)
-    Utilisateur = cursor.fetchone()
+    Utilisateurs = cursor.fetchone()
 
     # Récupérer les programmes associés à l'utilisateur
     cursor.execute("""
-        SELECT P.IdProgrammes, P.Titre, P.DetailsProgrammes, P.Duree_programme, P.Date_debut, P.Date_fin
+        SELECT P.IdProgrammes, P.Titre, P.DetailsProgrammes, P.Duree_programmes, P.Date_debut, P.Date_fin
         FROM Programmes P
         INNER JOIN Apprenants A ON P.IdProgrammes = A.IdProgrammes
         WHERE A.IdUtilisateurs = ?
@@ -1487,7 +1503,7 @@ def monespace():
         """, programme.IdProgrammes)
         formateurs += cursor.fetchall()
 
-    return render_template('/Apprenants/mon_espace.html', Utilisateur=Utilisateur, programmes=programmes, formateurs=formateurs)
+    return render_template('/Apprenants/mon_espace.html', Utilisateurs=Utilisateurs, programmes=programmes, formateurs=formateurs)
 
 @app.route("/analyze_comment", methods=['POST'])
 def analyze_comment():
@@ -1868,6 +1884,8 @@ def listprogrammes():
     IdUser = session.get('IdUtilisateurs')
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser))
     Utilisateurs = cursor.fetchone()
+    role = Utilisateurs[8]
+    print(f"Role: {role}")
 
     # Récupération des programmes
     cursor.execute("SELECT IdProgrammes, Images, Titre, Date_debut, Duree_programmes, Nombre_apprenants FROM Programmes")
@@ -1876,7 +1894,7 @@ def listprogrammes():
     
     connection.close()
 
-    return render_template("/Programmes/list-programmes.html", Utilisateurs=Utilisateurs, programmes=programmes)
+    return render_template("/Programmes/list-programmes.html", Utilisateurs=Utilisateurs, programmes=programmes,role=role)
 
 
 
@@ -2208,9 +2226,6 @@ def modifiebailleurs(IdBailleurs):
 
 
 
-
-
-
 @app.route('/suprimebailleurs/<int:IdBailleurs>', methods=['GET', 'POST'])
 def suprimebailleurs(IdBailleurs):
     # Vérifier si l'utilisateur est connecté
@@ -2369,7 +2384,7 @@ def emailing():
         sender = Utilisateurs.Email
         
         # Envoyer l'email via une fonction API (à implémenter)
-        response = envoyer_email_api(subject, message, sender, destinataires)
+        # response = envoyer_email_api(subject, message, sender, destinataires)
         flash('Email envoyé avec succès!', 'success')
         return redirect(url_for('emailing'))
     
