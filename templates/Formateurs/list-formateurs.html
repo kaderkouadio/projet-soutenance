@@ -35,7 +35,11 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Liste de tous les formateurs </h4>
+                                {% if role == 'Apprenants' or role == 'Formateurs' %}
+                                <!-- Ne rien afficher -->
+                                {% else %}
                                 <a href="{{ url_for('ajoutformateurs') }}" class="btn btn-primary">Ajouter</a>
+                                {% endif %} 
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -65,10 +69,14 @@
                                                     <td>{{ formateur.Adresse }}</td>
                                                     <td><a href="tel:{{ formateur.Telephone }}"><strong>{{ formateur.Telephone }}</strong></a></td>
                                                     <td><a href="mailto:{{ formateur.Email }}"><strong>{{ formateur.Email }}</strong></a></td>
+                                                    {% if role == 'Apprenants' or role == 'Formateurs' %}
+                                                    <!-- Ne rien afficher -->
+                                                    {% else %}
                                                     <td>
                                                         <a href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdFormateurs) }}" class="btn btn-sm btn-primary"><i class="la la-pencil"></i></a>
                                                         <a href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdFormateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"><i class="la la-trash-o"></i></a>
                                                     </td>
+                                                    {% endif %} 
                                                 </tr>
                                                 {% endfor %}
                                             {% else %}
@@ -95,8 +103,12 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right border py-0">
                                                     <div class="py-2">
+                                                        {% if role == 'Apprenants' or role == 'Formateurs' %}
+                                                        <!-- Ne rien afficher -->
+                                                        {% else %}
                                                         <a class="dropdown-item" href="{{ url_for('modifieformateurs', IdFormateurs=formateur.IdFormateurs) }}">Modifier</a>
                                                         <a class="dropdown-item text-danger" href="{{ url_for('suprimeformateurs', IdFormateurs=formateur.IdFormateurs) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce formateur : {{ formateur.Nom }} {{ formateur.Prenoms }} ? Cette action est irréversible.')"> Supprimer</a>
+                                                        {% endif %} 
                                                     </div>
                                                 </div>
                                             </div>

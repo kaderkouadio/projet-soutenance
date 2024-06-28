@@ -39,6 +39,7 @@
 						</a>
                         <ul aria-expanded="false">
                             <li><a href="{{ url_for('listformateurs') }}">list formateurs</a></li>
+                            <li><a href="{{ url_for('espaceformateurs') }}">Espace formateurs</a></li>
                         </ul>
                     </li>
 					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
@@ -74,7 +75,7 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{ url_for('listprogrammes') }}">list programmes</a></li>
-                            <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li>
+                            <!-- <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li> -->
                         </ul>
                     </li>                   
 					<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
@@ -123,7 +124,7 @@
             <div class="dlabnav-scroll">
                 <ul class="metismenu" id="menu">
                     <li class="nav-label first">Main Menu</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <!-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="la la-home"></i>
                             <span class="nav-text">Dashboard</span>
                         </a>
@@ -132,7 +133,7 @@
                             <li><a href="{{ url_for('Classification') }}">Classification </a></li>
                             <li><a href="{{ url_for('index') }}">Résultat de l'analyse</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li><a class="ai-icon" href="{{ url_for('Agenda') }}" aria-expanded="false">
                             <i class="la la-calendar"></i>
                             <span class="nav-text">Gestion des Taches</span>
@@ -144,6 +145,7 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{ url_for('listformateurs') }}">list formateurs</a></li>
+                            <li><a href="{{ url_for('espaceformateurs') }}">Espace formateurs</a></li>
                         </ul>
                     </li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
@@ -154,25 +156,16 @@
                             <li><a href="{{ url_for('listcategories') }}">list Categories</a></li>
                         </ul>
                     </li>
-
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="la la-graduation-cap"></i>
-                            <span class="nav-text">Cours</span>
-                        </a>
-                        <ul aria-expanded="false">
-                            <li><a href="{{ url_for('listCours')}}">list Cours</a></li>
-                        </ul>
-                    </li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                            <i class="la la-graduation-cap"></i>
                            <span class="nav-text">Programmes</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{ url_for('listprogrammes') }}">list programmes</a></li>
-                            <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li>
+                            <!-- <li><a href="{{ url_for('infosprogrammes') }}">Infos programmes</a></li> -->
                         </ul>
                     </li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <!-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="la la-users"></i>
                             <span class="nav-text">Communications</span>
                         </a>
@@ -180,7 +173,7 @@
                             <li><a href="{{ url_for('emailing')}}"> envoi d'email</a></li>
                             <li><a href="{{ url_for('sentiment')}}">analyse des commentaires</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>

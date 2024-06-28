@@ -57,8 +57,12 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right border py-0">
                                 <div class="py-2">
+                                    {% if role == 'Apprenants' or role == 'Formateurs' %}
+                                    <!-- Ne rien afficher -->
+                                    {% else %}
                                     <a class="dropdown-item" href="{{ url_for('modifieprogrammes', IdProgrammes=programme.IdProgrammes) }}">Modifier</a>
                                     <a class="dropdown-item text-danger" href="/supprimeprogrammes/{{programme.IdProgrammes}}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer le programme suivant ?\n\nTitre du programme : {{ programme.Titre }}\n\nCette action est irréversible.')">Supprimer</a>
+                                    {% endif %} 
                                 </div>
                             </div>
                         </div>

@@ -47,14 +47,14 @@ CREATE TABLE Categories (
     DetailsCategories VARCHAR(255),
 );
 
-DROP TABLE IF EXISTS Cours;
-CREATE TABLE Cours (
-    IdCours INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    Images VARCHAR(MAX),
-    Titre VARCHAR(255),
-    DetailsCours VARCHAR(255),
-    IdCategories INT NOT NULL,
-    FOREIGN KEY (IdCategories) REFERENCES Categories (IdCategories)
+-----DROP TABLE IF EXISTS Cours;
+-----CREATE TABLE Cours (
+------    IdCours INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+ ------   Images VARCHAR(MAX),
+ ------   Titre VARCHAR(255),
+ ------   DetailsCours VARCHAR(255),
+ ------   IdCategories INT NOT NULL,
+ ------   FOREIGN KEY (IdCategories) REFERENCES Categories (IdCategories)
 );
 
 DROP TABLE IF EXISTS Programmes;
@@ -103,15 +103,14 @@ CREATE TABLE Formateurs (
 
 
 -- Table de liaison pour Formateurs et Programmes
-
-DROP TABLE IF EXISTS Enseigner;
-CREATE TABLE Enseigner (
-    IdFormateur INT NOT NULL,
-    IdProgramme INT NOT NULL,
-    FOREIGN KEY (IdFormateur) REFERENCES Formateurs (IdFormateurs),
-    FOREIGN KEY (IdProgramme) REFERENCES Programmes (IdProgrammes),
-    PRIMARY KEY (IdFormateur, IdProgramme)
-);
+---DROP TABLE IF EXISTS Enseigner;
+---CREATE TABLE Enseigner (
+  -- - IdFormateur INT NOT NULL,
+   ---- IdProgramme INT NOT NULL,
+    ----FOREIGN KEY (IdFormateur) REFERENCES Formateurs (IdFormateurs),
+  ----  FOREIGN KEY (IdProgramme) REFERENCES Programmes (IdProgrammes),
+   ---- PRIMARY KEY (IdFormateur, IdProgramme)
+---);
 
 
 DROP TABLE IF EXISTS Apprenants;
@@ -131,33 +130,32 @@ CREATE TABLE Apprenants (
 
 
 
-
-
-DROP TABLE IF EXISTS Dossiers;
-CREATE TABLE Dossiers (
-    IdDossier INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    DateSoumission DATE NOT NULL,
-    Diplome BIT DEFAULT 0,
-    PieceIdentite BIT DEFAULT 0,
-    SupportsProgrammes BIT DEFAULT 0,
-    Date_Creation DATETIME DEFAULT GETDATE(),
-    IdProgrammes INT NOT NULL,
-    IdUtilisateurs INT NOT NULL, 
+DROP TABLE IF EXISTS Documents;
+CREATE TABLE Documents (
+    IdDocuments INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	NomFichier VARCHAR(255),
+	CheminFichier VARCHAR(255),
+    Dates DATETIME NOT NULL,
+    IdProgrammes INT NOT NULL, 
     FOREIGN KEY (IdProgrammes) REFERENCES Programmes (IdProgrammes),
-    FOREIGN KEY (IdUtilisateurs) REFERENCES Utilisateurs (IdUtilisateurs)
 );
 
 
 
-DROP TABLE IF EXISTS Communications;
-CREATE TABLE Communications (
-    IdCommunications INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+DROP TABLE IF EXISTS Commentaires;
+CREATE TABLE Commentaires (
+    IdCommentaires INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     Communicataire VARCHAR(255),
     Emailing VARCHAR(255),
     Date_Communications DATE,
+	avisformateur VARCHAR(255),
+	Analyse VARCHAR(255),
+	avisprogramme VARCHAR(255),
     Sentiment VARCHAR(255),
-    IdProgrammes INT NOT NULL,
-    FOREIGN KEY (IdProgrammes) REFERENCES Programmes (IdProgrammes),
+    IdApprenants INT NOT NULL,
+	IdFormateurs INT NOT NULL,
+    FOREIGN KEY (IdApprenants) REFERENCES Apprenants (IdApprenants),
+	FOREIGN KEY (IdFormateurs) REFERENCES Formateurs (IdFormateurs),
 );
 
 
@@ -179,6 +177,10 @@ select * from  Programmes
 select * from  Formateurs
 
 select * from  Apprenants
+
+
+DELETE FROM Communications
+
 
 select Images,Titre, Nombre_apprenants,Date_debut, Duree_programmes from Programmes;
 
@@ -208,3 +210,9 @@ DELETE FROM Utilisateurs;
 DELETE FROM Personnels;
 
 DELETE FROM Personnels;
+
+
+ SELECT F.*, U.*, I.*
+        FROM Formateurs F
+        JOIN Utilisateurs U ON F.IdUtilisateurs = U.IdUtilisateurs
+        JOIN Images I ON F.IdUtilisateurs = I.IdUtilisateurs;

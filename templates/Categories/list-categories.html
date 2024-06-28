@@ -20,7 +20,11 @@
         </div>
         <div class="card-header">
             <h4 class="card-title">Liste de toutes les Categories </h4>
+            {% if role == 'Apprenants' or role == 'Formateurs' %}
+            <!-- Ne rien afficher -->
+            {% else %}
             <a href="{{ url_for('ajoutcategories') }}" class="btn btn-primary">Ajouter</a>
+            {% endif %} 
         </div>
         <div class="row">
             {% for categorie in Categories %}
@@ -39,8 +43,12 @@
                             <div class="dropdown-menu dropdown-menu-right border py-0">
                                 <div class="py-2">
                                     <!-- Affichage des liens pour modifier chaque catégorie -->
+                                    {% if role == 'Apprenants' or role == 'Formateurs' %}
+                                    <!-- Ne rien afficher -->
+                                    {% else %}
                                     <a href="{{ url_for('modifiecategories', IdCategories=categorie.IdCategories) }}" class="dropdown-item">Modifier</a>
                                     <a href="/supprimecategories/{{categorie.IdCategories}}" class="dropdown-item text-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer la catégorie suivante ?\n\nTitre de la catégorie : {{ categorie.Titre }}\n\nCette action est irréversible.')">Supprimer</a>
+                                    {% endif %} 
                                 </div>
                             </div>
                         </div>

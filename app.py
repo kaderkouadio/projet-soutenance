@@ -269,24 +269,39 @@ def Agenda():
     return render_template('Agenda.html', Utilisateurs=Utilisateur)
 
 
-
-
-
-
 @app.route("/dashbord/")
 def dashbord():
     # Vérifier si l'utilisateur est connecté
     if 'IdUtilisateurs' not in session:
         return redirect(url_for('login'))
+
     IdUser = session.get('IdUtilisateurs')
     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
     cursor = connection.cursor()
-    
+
+    # Récupérer les informations de l'utilisateur connecté
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser,))
-    Utilisateur = cursor.fetchone()
+    Utilisateurs = cursor.fetchone()
+
+    return render_template("dashbord/dashbord.html", Utilisateurs=Utilisateurs)
+
+
+
+
+# @app.route("/dashbord/")
+# def dashbord():
+#     # Vérifier si l'utilisateur est connecté
+#     if 'IdUtilisateurs' not in session:
+#         return redirect(url_for('login'))
+#     IdUser = session.get('IdUtilisateurs')
+#     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+#     cursor = connection.cursor()
+    
+#     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser,))
+#     Utilisateurs = cursor.fetchone()
     
 
-    return render_template("/dashbord/dashbord.html", Utilisateurs=Utilisateur)
+#     return render_template("/dashbord/dashbord.html", Utilisateurs= Utilisateurs)
 
 
 @app.route('/accueilFormateurs')
@@ -595,8 +610,6 @@ def modifiepersonnels(IdPersonnels):
 
 
 
-
-
 @app.route("/suprime-personnels/<int:IdPersonnels>", methods=['GET', 'POST'])
 def suprimepersonnels(IdPersonnels):
     # Vérifier si l'utilisateur est connecté
@@ -654,6 +667,10 @@ def profile():
     # Récupérer les informations de l'utilisateur
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUtilisateurs,))
     Utilisateurs = cursor.fetchone()
+    
+     # Récupérer les informations de l'utilisateur
+    cursor.execute("SELECT * FROM Personnels WHERE IdUtilisateurs = ?", (IdUtilisateurs,))
+    personnels = cursor.fetchone()
 
     # Récupérer l'image de l'utilisateur depuis la table Images
     cursor.execute("SELECT * FROM Images WHERE IdUtilisateurs = ?", (IdUtilisateurs,))
@@ -667,7 +684,7 @@ def profile():
     else:
         image_url = url_for('static', filename='images/default.jpg')  # URL par défaut si aucune image n'est trouvée
 
-    return render_template("Personnels/profile.html", Utilisateurs=Utilisateurs, ImageUrl=image_url)
+    return render_template("Personnels/profile.html", Utilisateurs=Utilisateurs, personnels=personnels, ImageUrl=image_url)
 
 
 
@@ -731,8 +748,6 @@ def modifieprofil():
 
 
 
-
-
 #*****************************FORMATEURS*******************************#
 
 @app.route("/list-formateurs/", methods=['GET', 'POST'])
@@ -751,6 +766,8 @@ def listformateurs():
     # Sélectionner les informations de l'utilisateur connecté
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser,))
     Utilisateurs = cursor.fetchone()
+    role = Utilisateurs[8]
+    print(f"Role: {role}")
     
     # Sélectionner les formateurs et les informations associées
     # cursor.execute("""
@@ -777,7 +794,7 @@ def listformateurs():
     connection.close()
     
     # Rendre le template avec les données des utilisateurs et formateurs
-    return render_template("/Formateurs/list-formateurs.html", Utilisateurs=Utilisateurs, formateurs=formateurs)
+    return render_template("/Formateurs/list-formateurs.html", Utilisateurs=Utilisateurs, role=role, formateurs=formateurs)
 
 
 
@@ -1076,6 +1093,256 @@ def suprimeformateurs(IdFormateurs):
     cursor.close()
     connection.close()
     return redirect(url_for('listformateurs'))
+
+
+# @app.route("/espace_formateur", methods=['GET', 'POST'])
+# def espaceformateurs():
+#     if 'IdUtilisateurs' not in session:
+#         return redirect(url_for('login'))
+#     IdUser = session.get('IdUtilisateurs')
+    
+#     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+#     cursor = connection.cursor()
+
+#     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser,))
+#     Utilisateurs = cursor.fetchone()
+
+#     cursor.execute("""
+#         SELECT p.*, f.*
+#         FROM Programmes p
+#         JOIN Formateurs f ON p.IdProgrammes = f.IdProgrammes
+#         WHERE f.IdUtilisateurs = ?
+#     """, IdUser)
+#     rows = cursor.fetchall()
+
+#     programmes = []
+#     for row in rows:
+#         programme = {
+#             'IdProgrammes': row.IdProgrammes,
+#             'Images': row.Images,
+#             'Titre': row.Titre,
+#             'Duree_programmes': row.Duree_programmes,
+#             'Nombre_apprenants': row.Nombre_apprenants,
+#             'Date_debut': row.Date_debut,
+#             'Date_fin': row.Date_fin,
+#             'DetailsProgrammes': row.DetailsProgrammes,
+#             'IdCategories': row.IdCategories,
+#             'formateur': {
+#                 'IdFormateurs': row.IdFormateurs,
+#                 'Diplomes': row.Diplomes,
+#                 'Annees_Experiences': row.Annees_Experiences,
+#                 'IdUtilisateurs': row.IdUtilisateurs
+#             }
+#         }
+        
+#         cursor.execute("""
+#             SELECT U.Nom, U.Prenoms, U.Email, A.IdApprenants
+#             FROM Utilisateurs U
+#             JOIN Apprenants A ON U.IdUtilisateurs = A.IdUtilisateurs
+#             WHERE A.IdProgrammes = ?
+#         """, row.IdProgrammes)
+#         apprenants = cursor.fetchall()
+#         programme['apprenants'] = apprenants
+
+#         programmes.append(programme)
+
+#     if request.method == 'POST':
+#         if 'commentaire' in request.form:
+#             IdApprenants = request.form['IdApprenants']
+#             commentaire = request.form['commentaire']
+            
+#             if IdApprenants == 'all':
+#                 for programme in programmes:
+#                     for apprenant in programme['apprenants']:
+#                         cursor.execute('''
+#                             INSERT INTO Commentaires (IdFormateurs, IdApprenants, Commentaire)
+#                             VALUES (?, ?, ?)
+#                         ''', (IdUser, apprenant.IdApprenants, commentaire))
+#             else:
+#                 cursor.execute('''
+#                     INSERT INTO Commentaires (IdFormateurs, IdApprenants, Commentaire)
+#                     VALUES (?, ?, ?)
+#                 ''', (IdUser, IdApprenants, commentaire))
+                
+#             connection.commit()
+#             flash('Commentaire ajouté avec succès!', 'success')
+        
+#         elif 'document' in request.files:
+#             fichier = request.files['document']
+#             IdProgrammes = request.form['IdProgrammes']
+#             chemin_fichier = f"static/documents/{fichier.filename}"
+#             fichier.save(chemin_fichier)
+#             cursor.execute('''
+#                 INSERT INTO Documents (IdProgrammes, NomFichier, CheminFichier)
+#                 VALUES (?, ?, ?)
+#             ''', (IdProgrammes, fichier.filename, chemin_fichier))
+#             connection.commit()
+#             flash('Document ajouté avec succès!', 'success')
+
+#     return render_template('Formateurs/Espace_formateurs.html', programmes=programmes, Utilisateurs=Utilisateurs)
+
+
+@app.route("/espace_formateur", methods=['GET', 'POST'])
+def espaceformateurs():
+    if 'IdUtilisateurs' not in session:
+        return redirect(url_for('login'))
+    IdUser = session.get('IdUtilisateurs')
+    
+    connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser,))
+    Utilisateurs = cursor.fetchone()
+
+    cursor.execute("""
+        SELECT P.*, F.*
+        FROM Programmes P
+        JOIN Formateurs F ON P.IdProgrammes = F.IdProgrammes
+        WHERE F.IdUtilisateurs = ?
+    """, IdUser)
+    rows = cursor.fetchall()
+
+    programmes = []
+    for row in rows:
+        programme = {
+            'IdProgrammes': row.IdProgrammes,
+            'Images': row.Images,
+            'Titre': row.Titre,
+            'Duree_programmes': row.Duree_programmes,
+            'Nombre_apprenants': row.Nombre_apprenants,
+            'Date_debut': row.Date_debut,
+            'Date_fin': row.Date_fin,
+            'DetailsProgrammes': row.DetailsProgrammes,
+            'IdCategories': row.IdCategories,
+            'formateur': {
+                'IdFormateurs': row.IdFormateurs,
+                'Diplomes': row.Diplomes,
+                'Annees_Experiences': row.Annees_Experiences,
+                'IdUtilisateurs': row.IdUtilisateurs
+            }
+        }
+        
+        cursor.execute("""
+            SELECT U.Nom, U.Prenoms, U.Email, A.IdApprenants
+            FROM Utilisateurs U
+            JOIN Apprenants A ON U.IdUtilisateurs = A.IdUtilisateurs
+            WHERE A.IdProgrammes = ?
+        """, row.IdProgrammes)
+        apprenants = cursor.fetchall()
+        programme['apprenants'] = apprenants
+
+        programmes.append(programme)
+
+    if request.method == 'POST':
+        if 'commentaire' in request.form:
+            IdApprenants = request.form['IdApprenants']
+            commentaire = request.form['commentaire']
+            
+            # Appel à l'IA pour analyser le commentaire
+            
+            
+            # cleaned_comment = preprocess_text(commentaire)
+            # comment_vec = vectorizer.transform([cleaned_comment])
+            # prediction = model.predict(comment_vec)[0]
+            
+            # if IdApprenants == 'all':
+            #     for programme in programmes:
+            #         for apprenant in programme['apprenants']:
+            #             cursor.execute('''
+            #                 INSERT INTO Commentaires (IdFormateurs, IdApprenants, Commentaire, Analyse)
+            #                 VALUES (?, ?, ?, ?)
+            #             ''', (IdUser, apprenant.IdApprenants, commentaire, prediction))
+            # else:
+            #     cursor.execute('''
+            #         INSERT INTO Commentaires (IdFormateurs, IdApprenants, Commentaire, Analyse)
+            #         VALUES (?, ?, ?, ?)
+            #     ''', (IdUser, IdApprenants, commentaire, prediction))
+                
+            connection.commit()
+            flash('Commentaire ajouté avec succès!', 'success')
+        
+        elif 'document' in request.files:
+            fichier = request.files['document']
+            IdProgrammes = request.form['IdProgrammes']
+            CheminFichier = f"static/documents/{fichier.filename}"
+            fichier.save(CheminFichier)
+            cursor.execute('''
+                INSERT INTO Documents (IdProgrammes, NomFichier, CheminFichier)
+                VALUES (?, ?, ?)
+            ''', (IdProgrammes, fichier.filename, CheminFichier))
+            connection.commit()
+            flash('Document ajouté avec succès!', 'success')
+
+    return render_template('Formateurs/Espace_formateurs.html', programmes=programmes, Utilisateurs=Utilisateurs)
+
+
+
+
+@app.route("/commenter_apprenant", methods=['POST'])
+def commenter_apprenant():
+    if 'IdUtilisateurs' not in session:
+        return redirect(url_for('login'))
+
+    IdUser = session.get('IdUtilisateurs')
+    IdApprenants = request.form['IdApprenants']
+    IdProgrammes = request.form['IdProgrammes']
+    commentaire = request.form['commentaire']
+
+    connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        INSERT INTO Commentaires (IdFormateur, IdApprenants, IdProgrammes, Commentaire, Date)
+        VALUES (?, ?, ?, ?, GETDATE())
+    ''', (IdUser, IdApprenants, IdProgrammes, commentaire))
+
+    connection.commit()
+    flash('Votre commentaire a été envoyé avec succès!', 'success')
+    return redirect(url_for('espaceformateurs'))
+
+@app.route("/upload_support", methods=['POST'])
+def upload_support():
+    if 'IdUtilisateurs' not in session:
+        return redirect(url_for('login'))
+
+    IdUser = session.get('IdUtilisateurs')
+    if 'file' not in request.files:
+        flash('Aucun fichier sélectionné', 'danger')
+        return redirect(url_for('espace_formateur'))
+
+    file = request.files['file']
+    if file.filename == '':
+        flash('Aucun fichier sélectionné', 'danger')
+        return redirect(url_for('espaceformateurs'))
+
+    if file:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+        cursor = connection.cursor()
+        cursor.execute('''
+            INSERT INTO Supports (IdFormateur, NomFichier, Date)
+            VALUES (?, ?, GETDATE())
+        ''', (IdUser, filename))
+
+        connection.commit()
+        flash('Fichier téléchargé avec succès!', 'success')
+        return redirect(url_for('espaceformateurs'))
+
+    flash('Erreur lors du téléchargement du fichier', 'danger')
+    return redirect(url_for('espaceformateurs'))
+
+@app.route("/telecharger_support/<filename>")
+def telecharger_support(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+
+@app.route("/download/<filename>")
+def download_document(filename):
+    directory = app.config['UPLOAD_FOLDER']  # Répertoire où sont stockés les fichiers
+    return send_from_directory(directory, filename)
 
 
 
@@ -1451,7 +1718,7 @@ def suprimeapprenants(IdApprenants):
 
 
 
-@app.route("/infos-apprenants/")
+@app.route("/infos-apprenants/", methods=['GET', 'POST'])
 def infosapprenants():
     # Vérifier si l'utilisateur est connecté
     if 'IdUtilisateurs' not in session:
@@ -1469,7 +1736,43 @@ def infosapprenants():
 #***************************** Avis de l'Apprenant*******************************#
 
 
-@app.route("/monespace/")
+# @app.route("/monespace/")
+# def monespace():
+#     # Vérifier si l'utilisateur est connecté
+#     if 'IdUtilisateurs' not in session:
+#         return redirect(url_for('login'))
+
+#     IdUser = session.get('IdUtilisateurs')
+#     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+#     cursor = connection.cursor()
+    
+#     # Récupérer les informations de l'utilisateur connecté
+#     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", IdUser)
+#     Utilisateurs = cursor.fetchone()
+
+#     # Récupérer les programmes associés à l'utilisateur
+#     cursor.execute("""
+#         SELECT P.IdProgrammes, P.Titre, P.DetailsProgrammes, P.Duree_programmes, P.Date_debut, P.Date_fin
+#         FROM Programmes P
+#         INNER JOIN Apprenants A ON P.IdProgrammes = A.IdProgrammes
+#         WHERE A.IdUtilisateurs = ?
+#     """, IdUser)
+#     programmes = cursor.fetchall()
+
+#     # Récupérer les formateurs associés à chaque programme
+#     formateurs = []
+#     for programme in programmes:
+#         cursor.execute("""
+#             SELECT U.IdUtilisateurs, U.Nom, U.Prenoms, U.Email, U.Telephone, F.IdProgrammes
+#             FROM Utilisateurs U
+#             INNER JOIN Formateurs F ON U.IdUtilisateurs = F.IdUtilisateurs
+#             WHERE F.IdProgrammes = ?
+#         """, programme.IdProgrammes)
+#         formateurs += cursor.fetchall()
+
+#     return render_template('/Apprenants/mon_espace.html', Utilisateurs=Utilisateurs, programmes=programmes, formateurs=formateurs)
+
+@app.route("/monespace", methods=['GET', 'POST'])
 def monespace():
     # Vérifier si l'utilisateur est connecté
     if 'IdUtilisateurs' not in session:
@@ -1478,7 +1781,7 @@ def monespace():
     IdUser = session.get('IdUtilisateurs')
     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
     cursor = connection.cursor()
-    
+
     # Récupérer les informations de l'utilisateur connecté
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", IdUser)
     Utilisateurs = cursor.fetchone()
@@ -1490,11 +1793,11 @@ def monespace():
         INNER JOIN Apprenants A ON P.IdProgrammes = A.IdProgrammes
         WHERE A.IdUtilisateurs = ?
     """, IdUser)
-    programmes = cursor.fetchall()
+    programme = cursor.fetchall()
 
     # Récupérer les formateurs associés à chaque programme
     formateurs = []
-    for programme in programmes:
+    for programme in programme:
         cursor.execute("""
             SELECT U.IdUtilisateurs, U.Nom, U.Prenoms, U.Email, U.Telephone, F.IdProgrammes
             FROM Utilisateurs U
@@ -1503,33 +1806,102 @@ def monespace():
         """, programme.IdProgrammes)
         formateurs += cursor.fetchall()
 
-    return render_template('/Apprenants/mon_espace.html', Utilisateurs=Utilisateurs, programmes=programmes, formateurs=formateurs)
-
-@app.route("/analyze_comment", methods=['POST'])
-def analyze_comment():
-    data = request.json
-    comment = data['comment']
-    # Analyse de sentiment fictive pour démonstration
-    sentiment = "Positif" if "good" in comment.lower() else "Négatif"
-    return jsonify({'sentiment': sentiment})
+    return render_template('/Apprenants/mon_espace.html', Utilisateurs=Utilisateurs, programme=programme, formateur=formateurs)
 
 
 
-
-
-@app.route('/avisprogramme')
+# Route pour gérer l'avis sur le programme
+@app.route("/avisprogramme", methods=['POST'])
 def avisprogramme():
-    # avis = request.form['avis_programme']
-    # Sauvegardez l'avis sur le programme dans la base de données
-    flash('Votre avis sur le programme a été soumis avec succès', 'success')
-    return redirect(url_for('mon_espace'))
+    if 'IdUtilisateurs' not in session:
+        return redirect(url_for('login'))
 
-@app.route('/avisformateur')
-def avisformateur():
-    # avis = request.form['avis_formateur']
-    # Sauvegardez l'avis sur le formateur dans la base de données
-    flash('Votre avis sur le formateur a été soumis avec succès', 'success')
+    IdUser = session.get('IdUtilisateurs')
+    connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        IdProgrammes = request.form['IdProgrammes']
+        avis_programme = request.form['avis_programme']
+        send_time = request.form['send_time']
+        scheduled_time_programme = request.form.get('scheduled_time_programme')
+
+        # Analyse de sentiment du commentaire sur le programme
+        # sentiment = your_sentiment_model.analyser(avis_programme)
+
+        # Insérer les données dans la table Communications
+        cursor.execute('''
+            INSERT INTO Communications (Communicataire, Emailing, Date_Communications, avisformateur, avisprogramme, Sentiment, IdApprenants)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (None, None, datetime.now(), avis_programme, None, sentiment, IdUser))
+
+        connection.commit()
+        flash('Votre avis sur le programme a été envoyé avec succès!', 'success')
+        return redirect(url_for('monespace'))
+
     return redirect(url_for('monespace'))
+
+# Route pour gérer l'avis sur le formateur
+@app.route("/avisformateur", methods=['POST'])
+def avisformateur():
+    if 'IdUtilisateurs' not in session:
+        return redirect(url_for('login'))
+
+    IdUser = session.get('IdUtilisateurs')
+    connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        IdFormateur = request.form['IdFormateur']
+        avis_formateur = request.form['avis_formateur']
+        send_time = request.form['send_time']
+        scheduled_time_formateur = request.form.get('scheduled_time_formateur')
+
+        # Analyse de sentiment du commentaire sur le formateur
+        # sentiment = your_sentiment_model.analyser(avis_formateur)
+
+        # Insérer les données dans la table Communications
+        cursor.execute('''
+            INSERT INTO Communications (Communicataire, Emailing, Date_Communications, avisformateur, avisprogramme, Sentiment, IdApprenants)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (None, None, datetime.now(), avis_formateur, None, sentiment, IdUser))
+
+        connection.commit()
+        flash('Votre avis sur le formateur a été envoyé avec succès!', 'success')
+        return redirect(url_for('monespace'))
+
+    return redirect(url_for('monespace'))
+
+
+
+
+
+
+# @app.route("/analyze_comment", methods=['POST'])
+# def analyze_comment():
+#     data = request.json
+#     comment = data['comment']
+#     # Analyse de sentiment fictive pour démonstration
+#     sentiment = "Positif" if "good" in comment.lower() else "Négatif"
+#     return jsonify({'sentiment': sentiment})
+
+
+
+
+
+# @app.route('/avisprogramme')
+# def avisprogramme():
+#     # avis = request.form['avis_programme']
+#     # Sauvegardez l'avis sur le programme dans la base de données
+#     flash('Votre avis sur le programme a été soumis avec succès', 'success')
+#     return redirect(url_for('monespace'))
+
+# @app.route('/avisformateur')
+# def avisformateur():
+#     # avis = request.form['avis_formateur']
+#     # Sauvegardez l'avis sur le formateur dans la base de données
+#     flash('Votre avis sur le formateur a été soumis avec succès', 'success')
+#     return redirect(url_for('monespace'))
 
 
 
@@ -1547,6 +1919,8 @@ def listcategories():
 
     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", (IdUser,))
     Utilisateurs = cursor.fetchone()
+    role = Utilisateurs[8]
+    print(f"Role: {role}")
     cursor.close()
 
     if request.method == "POST":
@@ -1580,7 +1954,7 @@ def listcategories():
 
     connection.close()
 
-    return render_template("/Categories/list-categories.html", Utilisateurs=Utilisateurs, Categories=Categories)
+    return render_template("/Categories/list-categories.html", Utilisateurs=Utilisateurs, role=role, Categories=Categories)
 
 
 
@@ -2266,8 +2640,6 @@ def suprimebailleurs(IdBailleurs):
 
 
 
-
-
 @app.route("/profile-bailleurs/")
 def profilebailleurs():
     # Vérifier si l'utilisateur est connecté
@@ -2332,6 +2704,71 @@ def index():
 #*****************************Communications*******************************#
 
 
+# @app.route("/emailing/", methods=['GET', 'POST'])
+# def emailing():
+#     # Vérifier si l'utilisateur est connecté
+#     if 'IdUtilisateurs' not in session:
+#         return redirect(url_for('login'))
+
+#     IdUser = session.get('IdUtilisateurs')
+#     connection = pyodbc.connect(app.config['SQL_SERVER_CONNECTION_STRING'])
+#     cursor = connection.cursor()
+    
+#     # Récupérer les programmes
+#     cursor.execute("SELECT IdProgrammes, Titre FROM Programmes")
+#     Programmes = cursor.fetchall()
+    
+#     # Récupérer les informations de l'utilisateur connecté
+#     cursor.execute("SELECT * FROM Utilisateurs WHERE IdUtilisateurs = ?", IdUser)
+#     Utilisateurs = cursor.fetchone()
+    
+#     if request.method == 'POST':
+#         IdProgrammes = request.form['IdProgrammes']
+#         destinataires = []
+        
+#         send_to = request.form.get('send_to')
+        
+#         if send_to == 'formateur':
+#             subject = request.form['subject_formateur']
+#             message = request.form['message_formateur']
+#             cursor.execute("""
+#                 SELECT U.Email FROM Utilisateurs U
+#                 INNER JOIN Formateurs F ON U.IdUtilisateurs = F.IdUtilisateurs
+#                 WHERE F.IdProgrammes = ?
+#             """, IdProgrammes)
+#             formateurs = cursor.fetchall()
+#             for formateur in formateurs:
+#                 destinataires.append(formateur.Email)
+        
+#         elif send_to == 'apprenants':
+#             subject = request.form['subject_apprenants']
+#             message = request.form['message_apprenants']
+#             cursor.execute("""
+#                 SELECT U.Email FROM Utilisateurs U
+#                 INNER JOIN Apprenants A ON U.IdUtilisateurs = A.IdUtilisateurs
+#                 WHERE A.IdProgrammes = ?
+#             """, IdProgrammes)
+#             apprenants = cursor.fetchall()
+#             for apprenant in apprenants:
+#                 destinataires.append(apprenant.Email)
+        
+#         # Récupérer l'email de l'utilisateur connecté pour l'expéditeur
+#         sender = Utilisateurs.Email
+        
+#         # Envoyer l'email via une fonction API (à implémenter)
+#         # response = envoyer_email_api(subject, message, sender, destinataires)
+#         flash('Email envoyé avec succès!', 'success')
+#         return redirect(url_for('emailing'))
+    
+#     return render_template("/Communications/emailing.html", Utilisateurs=Utilisateurs, Programmes=Programmes)
+
+
+
+# Fonction fictive pour l'envoi d'emails
+def envoyer_email_api(subject, message, sender, destinataires, attachments):
+    # Implémentez ici l'envoi d'email avec votre API préférée
+    pass
+
 @app.route("/emailing/", methods=['GET', 'POST'])
 def emailing():
     # Vérifier si l'utilisateur est connecté
@@ -2353,7 +2790,8 @@ def emailing():
     if request.method == 'POST':
         IdProgrammes = request.form['IdProgrammes']
         destinataires = []
-        
+        attachments = []
+
         send_to = request.form.get('send_to')
         
         if send_to == 'formateur':
@@ -2367,6 +2805,14 @@ def emailing():
             formateurs = cursor.fetchall()
             for formateur in formateurs:
                 destinataires.append(formateur.Email)
+            
+            # Gestion des pièces jointes pour formateur
+            if 'attachments_formateur' in request.files:
+                for file in request.files.getlist('attachments_formateur'):
+                    filename = secure_filename(file.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    attachments.append(filepath)
         
         elif send_to == 'apprenants':
             subject = request.form['subject_apprenants']
@@ -2379,17 +2825,24 @@ def emailing():
             apprenants = cursor.fetchall()
             for apprenant in apprenants:
                 destinataires.append(apprenant.Email)
-        
+            
+            # Gestion des pièces jointes pour apprenants
+            if 'attachments_apprenants' in request.files:
+                for file in request.files.getlist('attachments_apprenants'):
+                    filename = secure_filename(file.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    attachments.append(filepath)
+
         # Récupérer l'email de l'utilisateur connecté pour l'expéditeur
         sender = Utilisateurs.Email
         
         # Envoyer l'email via une fonction API (à implémenter)
-        # response = envoyer_email_api(subject, message, sender, destinataires)
+        envoyer_email_api(subject, message, sender, destinataires, attachments)
         flash('Email envoyé avec succès!', 'success')
         return redirect(url_for('emailing'))
     
     return render_template("/Communications/emailing.html", Utilisateurs=Utilisateurs, Programmes=Programmes)
-
 
 
 

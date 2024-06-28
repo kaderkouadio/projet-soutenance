@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url_for('dashbord') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashbord') }}">Dashbord</a></li>
                     <li class="breadcrumb-item active"><a href="javascript:void(0);">Programme</a></li>
                     <li class="breadcrumb-item active"><a href="javascript:void(0);">Mon Programme</a></li>
                 </ol>
@@ -45,110 +45,161 @@
         </div>
         
         <div class="row mt-3">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Avis sur le Programme</h4>
+                        <h4 class="card-title">Choisir l'Avis à Envoyer</h4>
                     </div>
                     <div class="card-body">
-                        <form id="programme-feedback-form">
-                            <div class="form-group">
-                                <label class="form-label">Votre avis</label>
-                                <textarea class="form-control" name="avis_programme" rows="5" required></textarea>
+                        <form id="select-feedback-type">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feedback_type" id="programmeFeedback" value="programme" checked>
+                                <label class="form-check-label" for="programmeFeedback">
+                                    Avis sur le Programme
+                                </label>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Envoyer à</label>
-                                <select class="form-control" name="send_time" required>
-                                    <option value="now">Maintenant</option>
-                                    <option value="schedule">Planifier</option>
-                                </select>
-                            </div>
-                            <div class="form-group" id="schedule-time-programme" style="display:none;">
-                                <label class="form-label">Date et Heure</label>
-                                <input type="datetime-local" class="form-control" name="scheduled_time_programme">
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Envoyer</button>
-                                <button type="reset" class="btn btn-light">Annuler</button>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feedback_type" id="formateurFeedback" value="formateur">
+                                <label class="form-check-label" for="formateurFeedback">
+                                    Avis sur le Formateur
+                                </label>
                             </div>
                         </form>
-                        <div id="programme-feedback-result"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Avis sur le Formateur</h4>
+        </div>
+
+        <div id="programme-feedback-form" style="display: block;">
+            <!-- Formulaire d'avis sur le programme -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Avis sur le Programme</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="programme-feedback-form" method="POST" action="{{ url_for('avisprogramme') }}">
+                                <input type="hidden" name="IdProgrammes" value="{{ programme.IdProgrammes }}">
+                                <div class="form-group">
+                                    <label class="form-label">Votre avis</label>
+                                    <textarea class="form-control" name="avis_programme" rows="5" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Envoyer à</label>
+                                    <select class="form-control" name="send_time" required>
+                                        <option value="now">Maintenant</option>
+                                        <option value="schedule">Planifier</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="schedule-time-programme" style="display:none;">
+                                    <label class="form-label">Date et Heure</label>
+                                    <input type="datetime-local" class="form-control" name="scheduled_time_programme">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                                    <button type="reset" class="btn btn-light">Annuler</button>
+                                </div>
+                            </form>
+                            <div id="programme-feedback-result"></div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form id="formateur-feedback-form">
-                            <div class="form-group">
-                                <label class="form-label">Votre avis</label>
-                                <textarea class="form-control" name="avis_formateur" rows="5" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Envoyer à</label>
-                                <select class="form-control" name="send_time" required>
-                                    <option value="now">Maintenant</option>
-                                    <option value="schedule">Planifier</option>
-                                </select>
-                            </div>
-                            <div class="form-group" id="schedule-time-formateur" style="display:none;">
-                                <label class="form-label">Date et Heure</label>
-                                <input type="datetime-local" class="form-control" name="scheduled_time_formateur">
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Envoyer</button>
-                                <button type="reset" class="btn btn-light">Annuler</button>
-                            </div>
-                        </form>
-                        <div id="formateur-feedback-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="formateur-feedback-form" style="display: none;">
+            <!-- Formulaire d'avis sur le formateur -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Avis sur le Formateur</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="formateur-feedback-form" method="POST" action="{{ url_for('avisformateur') }}">
+                                <input type="hidden" name="IdFormateur" value="{{ formateur.IdFormateur }}">
+                                <div class="form-group">
+                                    <label class="form-label">Votre avis</label>
+                                    <textarea class="form-control" name="avis_formateur" rows="5" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Envoyer à</label>
+                                    <select class="form-control" name="send_time" required>
+                                        <option value="now">Maintenant</option>
+                                        <option value="schedule">Planifier</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="schedule-time-formateur" style="display:none;">
+                                    <label class="form-label">Date et Heure</label>
+                                    <input type="datetime-local" class="form-control" name="scheduled_time_formateur">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                                    <button type="reset" class="btn btn-light">Annuler</button>
+                                </div>
+                            </form>
+                            <div id="formateur-feedback-result"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
+        <div class="row mt-3">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Documents Disponibles</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for document in documents %}
+                            <li><a href="{{ url_for('static', filename=document.CheminFichier) }}" download>{{ document.NomFichier }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for document in documents %}
+                            <li><a href="{{ url_for('download_document', filename=document.NomFichier) }}">{{ document.NomFichier }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const programmeForm = document.getElementById('programme-feedback-form');
-    const formateurForm = document.getElementById('formateur-feedback-form');
+    const selectFeedbackTypeForm = document.getElementById('select-feedback-type');
+    const programmeFeedbackForm = document.getElementById('programme-feedback-form');
+    const formateurFeedbackForm = document.getElementById('formateur-feedback-form');
 
-    const sendTimeSelectProgramme = programmeForm.querySelector('select[name="send_time"]');
-    const scheduleTimeDivProgramme = document.getElementById('schedule-time-programme');
-    sendTimeSelectProgramme.addEventListener('change', function() {
-        if (this.value === 'schedule') {
-            scheduleTimeDivProgramme.style.display = 'block';
+    selectFeedbackTypeForm.addEventListener('change', function() {
+        if (selectFeedbackTypeForm.querySelector('input[name="feedback_type"]:checked').value === 'programme') {
+            programmeFeedbackForm.style.display = 'block';
+            formateurFeedbackForm.style.display = 'none';
         } else {
-            scheduleTimeDivProgramme.style.display = 'none';
+            programmeFeedbackForm.style.display = 'none';
+            formateurFeedbackForm.style.display = 'block';
         }
     });
 
-    const sendTimeSelectFormateur = formateurForm.querySelector('select[name="send_time"]');
-    const scheduleTimeDivFormateur = document.getElementById('schedule-time-formateur');
-    sendTimeSelectFormateur.addEventListener('change', function() {
-        if (this.value === 'schedule') {
-            scheduleTimeDivFormateur.style.display = 'block';
-        } else {
-            scheduleTimeDivFormateur.style.display = 'none';
-        }
-    });
-
-    programmeForm.addEventListener('submit', function(event) {
+    programmeFeedbackForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        const avis = programmeForm.querySelector('textarea[name="avis_programme"]').value;
-        const sendTime = programmeForm.querySelector('select[name="send_time"]').value;
-        const scheduledTime = programmeForm.querySelector('input[name="scheduled_time_programme"]').value;
+        const avis = programmeFeedbackForm.querySelector('textarea[name="avis_programme"]').value;
+        const sendTime = programmeFeedbackForm.querySelector('select[name="send_time"]').value;
+        const scheduledTime = programmeFeedbackForm.querySelector('input[name="scheduled_time_programme"]').value;
         
-        fetch('/analyze_comment', {
+        fetch('/avis_programme', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ comment: avis, send_time: sendTime, scheduled_time: scheduledTime }),
+            body: JSON.stringify({ avis: avis, send_time: sendTime, scheduled_time: scheduledTime }),
         })
         .then(response => response.json())
         .then(data => {
@@ -156,18 +207,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    formateurForm.addEventListener('submit', function(event) {
+    formateurFeedbackForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        const avis = formateurForm.querySelector('textarea[name="avis_formateur"]').value;
-        const sendTime = formateurForm.querySelector('select[name="send_time"]').value;
-        const scheduledTime = formateurForm.querySelector('input[name="scheduled_time_formateur"]').value;
+        const avis = formateurFeedbackForm.querySelector('textarea[name="avis_formateur"]').value;
+        const sendTime = formateurFeedbackForm.querySelector('select[name="send_time"]').value;
+        const scheduledTime = formateurFeedbackForm.querySelector('input[name="scheduled_time_formateur"]').value;
         
-        fetch('/analyze_comment', {
+        fetch('/avis_formateur', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ comment: avis, send_time: sendTime, scheduled_time: scheduledTime }),
+            body: JSON.stringify({ avis: avis, send_time: sendTime, scheduled_time: scheduledTime }),
         })
         .then(response => response.json())
         .then(data => {

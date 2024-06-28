@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block centre %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Espace formateur</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('dashbord') }}">Dashbord</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Programme</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0);">Mon Programme</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for programme in programmes %}
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Détails du Programme</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ programme.Titre }}</h5>
+                        <p>{{ programme.DetailsProgrammes }}</p>
+                        <p>Durée du Programme: {{ programme.Duree_programmes }}</p>
+                        <p>Date de début: {{ programme.Date_debut }}</p>
+                        <p>Date de fin: {{ programme.Date_fin }}</p>
+                        <hr>
+                        <h6>Formateur: {{ programme.formateur.Diplomes }} ({{ programme.formateur.Annees_Experiences }} ans d'expérience)</h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Commentaires</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('espaceformateurs') }}">
+                            <div class="form-group">
+                                <label class="form-label">Apprenant</label>
+                                <select class="form-control" name="IdApprenants" required>
+                                    <option value="all">Tous les apprenants</option>
+                                    {% for programme in programmes %}
+                                    {% for apprenant in programme.apprenants %}
+                                    <option value="{{ apprenant.IdApprenants }}">{{ apprenant.Nom }} {{ apprenant.Prenoms }}</option>
+                                    {% endfor %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Votre Commentaire</label>
+                                <textarea class="form-control" name="commentaire" rows="5" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Envoyer Commentaire</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Ajouter un Document</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('espaceformateurs') }}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="form-label">Programme</label>
+                                <select class="form-control" name="IdProgrammes" required>
+                                    {% for programme in programmes %}
+                                    <option value="{{ programme.IdProgrammes }}">{{ programme.Titre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ajouter un Document</label>
+                                <input type="file" class="form-control" name="document" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Ajouter Document</button>
+                            </div>
+                        </form>
+                        
+                        <div id="feedback-result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ajout de scripts si nécessaire
+});
+</script>
+
+{% endblock %}
